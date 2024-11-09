@@ -1,0 +1,6 @@
+1.23456789012346e+21 1.23456789012346e+21 null         null                 null                 null                 null                           null                
+4.56321789456321e+21 4.56321789456321e+21 null         null                 null                 null                 null                           null                
+4.56321789456321e+21 4.56321789456321e+21 null         null                 null                 null                 null                           null                
+4.56321789456321e+21 4.56321789456321e+21 null         null                 null                 null                 null                           null                
+4.56321789456321e+21 4.56321789456321e+21 500          null                 null                 null                 null                           null                
+4.56321789456321e+21 4.56321789456321e+21 700          Compra               N                    HON                  Varios                         jose15luis@gmail.com
