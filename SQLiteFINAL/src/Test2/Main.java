@@ -1,5 +1,6 @@
 package Test2;
 
+
 import java.sql.Connection;
 import java.util.Scanner;
 
@@ -13,6 +14,7 @@ public class Main {
         //System.out.println("-----------------");
         //System.out.println("1) Ingresar un Nuevo Titular");
         //System.out.println("2) Hacer una Trasnferencia");
+        ExportarArchivo archivo = new ExportarArchivo();
         Titular titularNew = new Titular();
         Transferencia transferencia = new Transferencia();
         Connection conexion = DatabaseConnection.connect();
@@ -20,7 +22,8 @@ public class Main {
         if (conexion != null) {
             System.out.println("Que desea hacer");
             //titularNew.validarTITULARnuevo();
-            transferencia.cargarTrasferencia();
+            //transferencia.cargarTrasferencia();
+            archivo.writeToFile("Terminamos2.txt");
         } else {
             System.out.println("Error en la conexión a la base de datos.");
         }

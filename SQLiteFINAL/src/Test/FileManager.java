@@ -1,31 +1,73 @@
 package Test;
 
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class FileManager {
     public void writeToFile(String filename) {
-        String query = "SELECT * FROM Cliente";
+        String query = "SELECT * FROM Registro";  // Asegúrate de que la consulta sea la correcta
+        StringBuilder datos = new StringBuilder();  // Acumula las líneas de datos a escribir
+        double importe = 0.0;  // Total acumulado
+        int fila = 1;  // Contador de filas
+
         try (Connection conexion = DatabaseConnection.connect();
-            PreparedStatement pstmt = conexion.prepareStatement(query);
-            ResultSet rs = pstmt.executeQuery();
-            FileWriter writer = new FileWriter(filename)) {
+             PreparedStatement pstmt = conexion.prepareStatement(query);
+             ResultSet rs = pstmt.executeQuery()) {
+
             while (rs.next()) {
+                // Recupera los datos de la base de datos
+                String cbuDEBITO = rs.getString("cbuDEBITO");
                 String cbuCREDITO = rs.getString("cbuCREDITO");
-                String EMAIL = rs.getString("EMAIL");
-                String TITULAR = rs.getString("TITULAR");
-                String line = String.format("%-20s %-20s %-12s %-20s %-20s %-20s %-30s %-20s",cbuCREDITO,EMAIL,TITULAR);
-                writer.write(line + "\n");
+                double importeActual = rs.getDouble("IMPORTE"); 
+                String concepto = rs.getString("CONCEPTO");
+                String motivo = rs.getString("MOTIVO");
+                String referencia = rs.getString("REFERENCIA");
+                String email = rs.getString("EMAIL");
+                String titular = rs.getString("TITULAR");
+
+                // Generar la fila con el formato específico
+                String filaData = String.format("%s%s" + espacios(44) + "%012d%s" + espacios(44) + "%s%s" + espacios(6) + "%s" + espacios(30) + "%s\n",
+                        cbuDEBITO, cbuCREDITO, (int) (importeActual * 100), concepto, motivo, referencia, email, titular);
+
+                // Acumula la fila
+                datos.append(filaData);
+
+                // Acumula el importe total
+                importe += importeActual;
+                fila++;  // Incrementa el contador de filas
             }
-            System.out.println("Datos guardados en el archivo.");
-        } catch (Exception e) {
+
+            // Guardar los datos en el archivo
+            try (FileOutputStream fos = new FileOutputStream(new File(filename))) {
+                fos.write(datos.toString().getBytes());  // Escribe las líneas de datos
+                // Al final, escribe el total acumulado
+                fos.write(String.format("%05d%017d%194s\n", fila, (int) (importe * 100), "").getBytes());
+                System.out.println("Archivo generado exitosamente: " + filename);
+            } catch (IOException e) {
+                System.out.println("Error al guardar el archivo: " + e.getMessage());
+            }
+
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static String espacios(int cantidad) {
-        return " ".repeat(cantidad); // Desde Java 11
+    // Método para agregar espacios
+    private String espacios(int cantidad) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < cantidad; i++) {
+            sb.append(" ");
+        }
+        return sb.toString();
     }
+
+    /*public static String espacios(int cantidad) {
+        return " ".repeat(cantidad); // Desde Java 11
+    }*/
 }

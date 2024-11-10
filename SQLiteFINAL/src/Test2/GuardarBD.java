@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import Test.DatabaseConnection;
-import Test3.Datos2;
+
 
 public class GuardarBD {
     public void insertTITULAR(Datos cliente){
@@ -274,14 +274,14 @@ public class GuardarBD {
 
             // Si clienteDebito tiene "propio" true (1), insertamos el alias en aliasDEBITO
             if (clienteDebito.isPropio()) {
-                stmt.setString(1, clienteDebito.getAlias()); // aliasDEBITO
+                stmt.setString(1, clienteDebito.getCbu()); // aliasDEBITO
             } else {
                 stmt.setString(1, null); // Si no es propio, no se inserta aliasDEBITO
             }
 
             // Si clienteCredito tiene "propio" false (0), insertamos el alias en aliasCREDITO
             if (clienteCredito.isPropio() == false) {
-                stmt.setString(2, clienteCredito.getAlias()); // aliasCREDITO
+                stmt.setString(2, clienteCredito.getCbu()); // aliasCREDITO
                 stmt.setString(5, clienteCredito.getEmail()); // email
                 stmt.setString(6, clienteCredito.getTitular()); // titular
             } else {

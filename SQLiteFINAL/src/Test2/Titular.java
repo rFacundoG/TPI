@@ -1,6 +1,5 @@
 package Test2;
 
-import java.util.List;
 import java.util.Scanner;
 
 public class Titular {
